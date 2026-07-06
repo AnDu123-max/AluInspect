@@ -1,0 +1,286 @@
+/* =========================================
+   AI Material Inspection Dashboard
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+/* Navbar */
+
+.navbar{
+    background:#0d6efd;
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+.navbar-brand{
+    color:#fff !important;
+    font-size:24px;
+    font-weight:bold;
+}
+
+/* Cards */
+
+.card{
+    border:none;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.stat-number{
+    font-size:40px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.text-primary{
+    color:#0d6efd !important;
+}
+
+.text-success{
+    color:#198754 !important;
+}
+
+.text-danger{
+    color:#dc3545 !important;
+}
+
+.text-warning{
+    color:#ffc107 !important;
+}
+
+/* Chart Cards */
+
+.chart-card{
+    padding:20px;
+    min-height:420px;
+}
+
+.chart-card h4{
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+canvas{
+    width:100% !important;
+    height:320px !important;
+}
+
+/* Table */
+
+table{
+    background:#fff;
+}
+
+.table thead{
+    text-align:center;
+}
+
+.table tbody td{
+    text-align:center;
+    vertical-align:middle;
+}
+
+/* Badges */
+
+.badge{
+    padding:8px 15px;
+    font-size:14px;
+}
+
+/* Buttons */
+
+.btn{
+    border-radius:10px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:#0d6efd;
+}
+
+.btn-success{
+    background:#198754;
+}
+
+.btn-danger{
+    background:#dc3545;
+}
+
+/* Search Box */
+
+.search-box{
+    width:300px;
+    margin-bottom:20px;
+}
+
+/* Images */
+
+.result-image{
+    width:100%;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.thumbnail{
+
+width:80px;
+
+height:80px;
+
+object-fit:cover;
+
+border-radius:10px;
+
+border:2px solid #ddd;
+
+transition:.3s;
+
+cursor:pointer;
+
+}
+
+.thumbnail:hover{
+
+transform:scale(1.15);
+
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+
+}
+/* Footer */
+
+.footer{
+    margin-top:50px;
+    padding:15px;
+    text-align:center;
+    color:#666;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.stat-number{
+    font-size:30px;
+}
+
+.chart-card{
+    margin-bottom:20px;
+}
+
+.search-box{
+    width:100%;
+}
+
+.navbar-brand{
+    font-size:20px;
+}
+
+}
+/* ===========================
+   Sidebar
+=========================== */
+
+.sidebar{
+
+position:fixed;
+
+left:0;
+
+top:0;
+
+width:260px;
+
+height:100vh;
+
+background:#0f172a;
+
+padding:30px;
+
+color:white;
+
+}
+
+.sidebar h3{
+
+font-weight:bold;
+
+margin-bottom:40px;
+
+}
+
+.sidebar a{
+
+display:block;
+
+padding:14px;
+
+margin-bottom:12px;
+
+text-decoration:none;
+
+color:white;
+
+border-radius:10px;
+
+transition:.3s;
+
+font-size:17px;
+
+}
+
+.sidebar a:hover{
+
+background:#2563eb;
+
+transform:translateX(5px);
+
+}
+
+.sidebar .active{
+
+background:#2563eb;
+
+}
+
+.content{
+
+margin-left:280px;
+
+padding:35px;
+
+}
+
+body{
+
+background:#f5f7fb;
+
+}
+
+.card{
+
+border-radius:18px;
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+}

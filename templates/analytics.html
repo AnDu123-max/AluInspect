@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AluInspect Analytics</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#edf2f7;
+overflow-x:hidden;
+}
+
+.sidebar{
+
+position:fixed;
+
+left:0;
+
+top:0;
+
+width:250px;
+
+height:100vh;
+
+background:#0f172a;
+
+padding:25px;
+
+color:white;
+
+}
+
+.sidebar h2{
+
+text-align:center;
+
+margin-bottom:40px;
+
+font-weight:bold;
+
+}
+
+.sidebar a{
+
+display:block;
+
+color:white;
+
+text-decoration:none;
+
+padding:14px;
+
+margin-bottom:12px;
+
+border-radius:12px;
+
+transition:.3s;
+
+font-size:17px;
+
+}
+
+.sidebar a:hover{
+
+background:#2563eb;
+
+padding-left:20px;
+
+}
+
+.active{
+
+background:#2563eb;
+
+}
+
+.content{
+
+margin-left:270px;
+
+padding:35px;
+
+}
+
+.title{
+
+font-size:35px;
+
+font-weight:bold;
+
+margin-bottom:30px;
+
+}
+
+.card{
+
+border:none;
+
+border-radius:18px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+}
+
+.stat-card{
+
+padding:25px;
+
+text-align:center;
+
+height:180px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+}
+
+.icon{
+
+font-size:42px;
+
+margin-bottom:12px;
+
+}
+
+.stat-title{
+
+font-size:18px;
+
+font-weight:600;
+
+white-space:nowrap;
+
+}
+
+.stat-value{
+
+font-size:42px;
+
+font-weight:bold;
+
+margin-top:10px;
+
+}
+
+.chart-card{
+
+padding:20px;
+
+height:430px;
+
+}
+
+.info-card{
+
+padding:25px;
+
+height:180px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+}
+
+.info-card h2{
+
+font-weight:bold;
+
+margin-top:15px;
+
+}
+
+canvas{
+
+max-height:330px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>
+
+🤖 AluInspect Analytics 
+
+</h2>
+
+<a href="{{ url_for('dashboard') }}">
+
+🏠 Dashboard
+
+</a>
+
+<a href="{{ url_for('analytics') }}" class="active">
+
+📊 Analytics
+
+</a>
+
+<a href="{{ url_for('home') }}">
+
+📤 New Inspection
+
+</a>
+
+<a href="{{ url_for('clear') }}">
+
+🗑 Clear Database
+
+</a>
+
+</div>
+
+<div class="content">
+
+<div class="title">
+
+📊 AI Analytics Dashboard
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card stat-card">
+
+<div class="icon text-primary">
+
+<i class="fa-solid fa-boxes-stacked"></i>
+
+</div>
+
+<div class="stat-title">
+
+Total Inspections
+
+</div>
+
+<div class="stat-value text-primary">
+
+{{ stats.total }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card stat-card">
+
+<div class="icon text-success">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<div class="stat-title">
+
+Passed
+
+</div>
+
+<div class="stat-value text-success">
+
+{{ stats.passed }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card stat-card">
+
+<div class="icon text-danger">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+</div>
+
+<div class="stat-title">
+
+Failed
+
+</div>
+
+<div class="stat-value text-danger">
+
+{{ stats.failed }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card stat-card">
+
+<div class="icon text-warning">
+
+<i class="fa-solid fa-bullseye"></i>
+
+</div>
+
+<div class="stat-title">
+
+Average Confidence
+
+</div>
+
+<div class="stat-value text-warning">
+
+{{ stats.average }}%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card chart-card">
+
+<h4 class="text-center mb-4">
+
+📈 Defect Share
+
+</h4>
+
+<canvas id="pieChart"></canvas>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card chart-card">
+
+<h4 class="text-center mb-4">
+
+📊 Top 5 Defects
+
+</h4>
+
+<canvas id="defectChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card info-card">
+
+<h4>
+
+🏆 Most Common Defect
+
+</h4>
+
+<h2 class="text-primary">
+
+{{ common[0] }}
+
+</h2>
+
+<p class="text-muted">
+
+Detected
+
+<b>
+
+{{ common[1] }}
+
+</b>
+
+times
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card info-card">
+
+<h4>
+
+🎯 Highest Confidence
+
+</h4>
+
+<h2 class="text-success">
+
+{{ highest }}%
+
+</h2>
+
+<p class="text-muted">
+
+Highest confidence detected by AI
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card p-4">
+
+<h4 class="mb-4">
+
+📌 AI Summary
+
+</h4>
+
+<div class="row text-center">
+
+<div class="col-md-4">
+
+<h5>Total Images</h5>
+
+<h2 class="text-primary">
+
+{{ stats.total }}
+
+</h2>
+
+</div>
+
+<div class="col-md-4">
+
+<h5>Pass Rate</h5>
+
+<h2 class="text-success">
+
+{% if stats.total > 0 %}
+
+{{ ((stats.passed / stats.total) * 100)|round(2) }}%
+
+{% else %}
+
+0%
+
+{% endif %}
+
+</h2>
+
+</div>
+
+<div class="col-md-4">
+
+<h5>Failure Rate</h5>
+
+<h2 class="text-danger">
+
+{% if stats.total > 0 %}
+
+{{ ((stats.failed / stats.total) * 100)|round(2) }}%
+
+{% else %}
+
+0%
+
+{% endif %}
+
+</h2>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+
+const topLabels = {{ top_labels | tojson }};
+const topValues = {{ top_values | tojson }};
+
+// =========================
+// Inspection Trend
+// =========================
+
+const pieLabels = JSON.parse('{{ pie_labels | tojson | safe }}');
+const pieValues = JSON.parse('{{ pie_values | tojson | safe }}');
+
+new Chart(document.getElementById("pieChart"), {
+
+    type: "pie",
+
+    data: {
+
+        labels: pieLabels,
+
+        datasets: [{
+
+            data: pieValues,
+
+            backgroundColor: [
+                "#2563eb",
+                "#22c55e",
+                "#ef4444",
+                "#f59e0b",
+                "#8b5cf6"
+            ],
+
+            borderColor: "#ffffff",
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                position: "bottom"
+
+            }
+
+        }
+
+    }
+
+});
+
+// =========================
+// Top Defects
+// =========================
+
+new Chart(
+
+document.getElementById("defectChart"),
+
+{
+
+type:"bar",
+
+data:{
+
+labels:topLabels,
+
+datasets:[{
+
+label:"Detected Defects",
+
+data:topValues,
+
+backgroundColor:[
+
+"#0d6efd",
+
+"#20c997",
+
+"#ffc107",
+
+"#dc3545",
+
+"#6f42c1"
+
+],
+
+borderRadius:8
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+},
+
+scales:{
+
+y:{
+
+beginAtZero:true
+
+}
+
+}
+
+}
+
+}
+
+);
+
+</script>
+
+</div>
+
+</body>
+
+</html>
