@@ -161,6 +161,6 @@ The analytics page provides
 
 **Anurag Dubey**
 
-B.Tech Computer Science Engineering
+B.Tech Computer Science Engineering with specialization in AI & ML
 
 Project: **AluInspect – AI-Powered Aluminium Surface Inspection System**
